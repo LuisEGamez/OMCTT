@@ -10,30 +10,28 @@
 </head>
 <body>
     <div class="container">
-        <h1>ToDo Management System</h1>
-        <hr>
-        <h2>Save ToDo</h2>
         <div class="card bg-light">
-            <div class="card-header bg-dark text-white">
+            <div class="card-header bg-dark text-white" th:text="${title}">
             </div>
             <div class="card-body">
-                <form>
+                <form th:action="@{/save}" th:object="${toDo}" method="post">
                     <div class="md-3 mt-3">
-                        <input type="text" class="form-control" id="title" placeholder="Title">
+                        <input type="text" th:field="*{title}" class="form-control" id="title" placeholder="Title" required maxlength="200">
                         <small></small>
                     </div>
                     <div class="md-3 mt-3">
-                        <select class="form-select" aria-label="Default select example">
-                            <option selected>Choose user</option>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
+                        <label class="form-check-label" for="user">Choose user</label>
+                        <select class="form-select" id="user" th:field="*{user}" aria-label="Default select example">
+                            <option value="" >None</option>
+                            <option th:each="user : ${users}"
+                                    th:value="${user.id}"
+                                    th:text="${user.username}"></option>
                         </select>
                         <small></small>
                     </div>
 
                     <div class="mb-3 form-check mt-3">
-                        <input type="checkbox" class="form-check-input" id="completed">
+                        <input type="checkbox" th:field="*{completed}" class="form-check-input" id="completed">
                         <label class="form-check-label" for="completed">Completed</label>
                     </div>
                     <div class="card-footer bg-dark">

@@ -1,17 +1,26 @@
 package com.omctt.controller;
 
 import com.omctt.entity.ToDo;
+import com.omctt.entity.User;
 import com.omctt.service.ToDoService;
+import com.omctt.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+
+import java.util.List;
 
 @Controller
 public class AppController {
 
     @Autowired
     private ToDoService toDoService;
+
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/")
     public String viewHomePage(Model model){
@@ -23,8 +32,19 @@ public class AppController {
     @GetMapping("/showNewToDoForm")
     public String showNewToDoForm(Model model){
         ToDo toDo = new ToDo();
+        List<User> userList = userService.getAll();
+        model.addAttribute("title", "New ToDo");
         model.addAttribute("toDo", toDo);
-        return "newToDo";
+        model.addAttribute("users", userList);
 
+        return "formToDo";
+
+    }
+
+    @PostMapping("/save")
+    public String save(@ModelAttribute ToDo toDo){
+
+        toDoService.saveToDo(toDo);
+        return "redirect:/";
     }
 }

@@ -29,11 +29,16 @@ public class ToDoServiceImp implements ToDoService{
     }
 
     private ToDoDto convertToDto(ToDo toDo) {
-        return new ToDoDto(
-                toDo.getTitle(),
-                toDo.getUser().getUsername(),
-                toDo.getUser().getAddress().getCountry(),
-                toDo.getCompleted()
-        );
+        ToDoDto toDoDto = new ToDoDto();
+        toDoDto.setTitle(toDo.getTitle());
+        toDoDto.setCompleted(toDo.getCompleted());
+        if(toDo.getUser()==null){
+            toDoDto.setUserName("");
+            toDoDto.setCountry("");
+        }else {
+            toDoDto.setUserName(toDo.getUser().getUsername());
+            toDoDto.setCountry(toDo.getUser().getAddress().getCountry());
+        }
+        return toDoDto;
     }
 }
