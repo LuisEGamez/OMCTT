@@ -1,5 +1,6 @@
 package com.omctt.controller;
 
+import com.omctt.entity.ToDo;
 import com.omctt.service.ToDoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,5 +18,13 @@ public class AppController {
 
         model.addAttribute("listToDos", toDoService.findAll());
         return "index";
+    }
+
+    @GetMapping("/showNewToDoForm")
+    public String showNewToDoForm(Model model){
+        ToDo toDo = new ToDo();
+        model.addAttribute("toDo", toDo);
+        return "newToDo";
+
     }
 }
