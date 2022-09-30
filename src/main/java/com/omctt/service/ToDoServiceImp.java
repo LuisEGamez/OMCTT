@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,6 +27,16 @@ public class ToDoServiceImp implements ToDoService{
     @Override
     public void saveToDo(ToDo toDo) {
         toDoRepository.save(toDo);
+    }
+
+    @Override
+    public ToDo findById(Integer idToDo) {
+        Optional<ToDo> optionalToDo = toDoRepository.findById(idToDo);
+        ToDo toDo = null;
+        if (optionalToDo.isPresent()){
+            toDo = optionalToDo.get();
+        }
+        return toDo;
     }
 
     private ToDoDto convertToDto(ToDo toDo) {

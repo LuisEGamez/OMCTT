@@ -16,12 +16,13 @@
             <div class="card-body">
                 <form th:action="@{/save}" th:object="${toDo}" method="post">
                     <div class="md-3 mt-3">
+                        <input type="hidden" th:field="*{id}">
                         <input type="text" th:field="*{title}" class="form-control" id="title" placeholder="Title" required maxlength="200">
                         <small></small>
                     </div>
                     <div class="md-3 mt-3">
-                        <label class="form-check-label" for="user">Choose user</label>
-                        <select class="form-select" id="user" th:field="*{user}" aria-label="Default select example">
+                        <label class="form-check-label">Choose user</label>
+                        <select class="form-select" th:field="*{user}" aria-label="Default select example">
                             <option value="" >None</option>
                             <option th:each="user : ${users}"
                                     th:value="${user.id}"

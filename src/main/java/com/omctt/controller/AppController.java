@@ -1,5 +1,6 @@
 package com.omctt.controller;
 
+import com.omctt.dto.ToDoDto;
 import com.omctt.entity.ToDo;
 import com.omctt.entity.User;
 import com.omctt.service.ToDoService;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
@@ -29,8 +31,8 @@ public class AppController {
         return "index";
     }
 
-    @GetMapping("/showNewToDoForm")
-    public String showNewToDoForm(Model model){
+    @GetMapping("/create")
+    public String create(Model model){
         ToDo toDo = new ToDo();
         List<User> userList = userService.getAll();
         model.addAttribute("title", "New ToDo");
@@ -46,5 +48,17 @@ public class AppController {
 
         toDoService.saveToDo(toDo);
         return "redirect:/";
+    }
+
+    @GetMapping("/edit/{id}")
+    public String edit(@PathVariable("id") Integer idToDo, Model model){
+        ToDo toDo = toDoService.findById(idToDo);
+        List<User> userList = userService.getAll();
+        model.addAttribute("title", "Edit ToDo");
+        model.addAttribute("toDo", toDo);
+        model.addAttribute("users", userList);
+
+        return "formToDo";
+
     }
 }

@@ -10,4 +10,7 @@ public interface ToDoService {
     List<ToDoDto> findAll();
 
     void saveToDo(ToDo toDo);
+
+    ToDo findById(Integer idToDo);
+
 }
