@@ -39,8 +39,14 @@ public class ToDoServiceImp implements ToDoService{
         return toDo;
     }
 
+    @Override
+    public void delete(Integer idToDo) {
+        toDoRepository.deleteById(idToDo);
+    }
+
     private ToDoDto convertToDto(ToDo toDo) {
         ToDoDto toDoDto = new ToDoDto();
+        toDoDto.setId(toDo.getId());
         toDoDto.setTitle(toDo.getTitle());
         toDoDto.setCompleted(toDo.getCompleted());
         if(toDo.getUser()==null){

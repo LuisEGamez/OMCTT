@@ -8,11 +8,13 @@ import com.omctt.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -44,8 +46,14 @@ public class AppController {
     }
 
     @PostMapping("/save")
-    public String save(@ModelAttribute ToDo toDo){
-
+    public String save(@Valid @ModelAttribute ToDo toDo, BindingResult result, Model model){
+        List<User> userList = userService.getAll();
+        if(result.hasErrors()){
+            model.addAttribute("title", "New ToDo");
+            model.addAttribute("toDo", toDo);
+            model.addAttribute("users", userList);
+            return "formToDo";
+        }
         toDoService.saveToDo(toDo);
         return "redirect:/";
     }
@@ -59,6 +67,15 @@ public class AppController {
         model.addAttribute("users", userList);
 
         return "formToDo";
+
+    }
+
+    @GetMapping("/delete/{id}")
+    public String delete(@PathVariable("id") Integer idToDo){
+
+        toDoService.delete(idToDo);
+
+        return "redirect:/";
 
     }
 }

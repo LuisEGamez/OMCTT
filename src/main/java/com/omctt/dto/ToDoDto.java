@@ -9,6 +9,7 @@ import lombok.*;
 @ToString
 public class ToDoDto {
 
+    private Integer id;
     private String title;
     private String userName;
     private String country;

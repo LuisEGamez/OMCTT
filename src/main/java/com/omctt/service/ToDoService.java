@@ -13,4 +13,6 @@ public interface ToDoService {
 
     ToDo findById(Integer idToDo);
 
+    void delete(Integer idToDo);
+
 }
