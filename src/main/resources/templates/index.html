@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ToDo's</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT"
+          crossorigin="anonymous">
+</head>
+<body>
+    <div class="container my-2">
+        <h1>ToDo's</h1>
+        <a th:href="@{/showNewToDoForm}" class="btn btn-primary btn-sm mb-3">Create ToDo</a>
+        <table border="1" class="table table-striped table-responsive-md">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Username</th>
+                    <th>Pais</th>
+                    <th>Completed</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="toDoDto : ${listToDos}">
+                    <td th:text="${toDoDto.title}"></td>
+                    <td th:text="${toDoDto.userName}"></td>
+                    <td th:text="${toDoDto.country}"></td>
+                    <td th:text="${toDoDto.completed}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>

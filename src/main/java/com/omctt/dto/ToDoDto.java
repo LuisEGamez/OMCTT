@@ -10,6 +10,8 @@ import lombok.*;
 public class ToDoDto {
 
     private String title;
-    private Boolean completed;
     private String userName;
+    private String country;
+    private Boolean completed;
+
 }

@@ -23,11 +23,17 @@ public class ToDoServiceImp implements ToDoService{
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public void saveToDo(ToDo toDo) {
+        toDoRepository.save(toDo);
+    }
+
     private ToDoDto convertToDto(ToDo toDo) {
         return new ToDoDto(
                 toDo.getTitle(),
-                toDo.getCompleted(),
-                toDo.getUser().getUsername()
+                toDo.getUser().getUsername(),
+                toDo.getUser().getAddress().getCountry(),
+                toDo.getCompleted()
         );
     }
 }
