@@ -9,10 +9,13 @@ public interface ToDoService {
 
     List<ToDoDto> findAll();
 
+    List<ToDoDto> findByTitle(String title);
+
+    List<ToDoDto> findByUsername(String username);
+
     void saveToDo(ToDo toDo);
 
     ToDo findById(Integer idToDo);
 
     void delete(Integer idToDo);
-
 }

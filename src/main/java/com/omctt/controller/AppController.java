@@ -1,6 +1,5 @@
 package com.omctt.controller;
 
-import com.omctt.dto.ToDoDto;
 import com.omctt.entity.ToDo;
 import com.omctt.entity.User;
 import com.omctt.service.ToDoService;
@@ -27,11 +26,37 @@ public class AppController {
     private UserService userService;
 
     @GetMapping("/")
-    public String viewHomePage(Model model){
+    public String getToDos(Model model){
 
         model.addAttribute("listToDos", toDoService.findAll());
+
         return "index";
     }
+
+    @GetMapping("/searchByTitle")
+    public String getToDosByTitle(Model model,String title){
+
+        if(title !=null && !title.equals("")){
+            model.addAttribute("listToDos", toDoService.findByTitle(title));
+        } else {
+            model.addAttribute("listToDos", toDoService.findAll());
+        }
+
+        return "index";
+    }
+
+    @GetMapping("/searchByUsername")
+    public String getToDosByUsername(Model model,String username){
+
+        if(username !=null && !username.equals("")){
+            model.addAttribute("listToDos", toDoService.findByUsername(username));
+        } else {
+            model.addAttribute("listToDos", toDoService.findAll());
+        }
+
+        return "index";
+    }
+
 
     @GetMapping("/create")
     public String create(Model model){
@@ -60,6 +85,7 @@ public class AppController {
 
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable("id") Integer idToDo, Model model){
+
         ToDo toDo = toDoService.findById(idToDo);
         List<User> userList = userService.getAll();
         model.addAttribute("title", "Edit ToDo");

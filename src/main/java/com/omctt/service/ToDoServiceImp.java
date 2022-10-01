@@ -25,6 +25,22 @@ public class ToDoServiceImp implements ToDoService{
     }
 
     @Override
+    public List<ToDoDto> findByTitle(String title) {
+        return toDoRepository.findByTitleContainingIgnoreCase(title)
+                .stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ToDoDto> findByUsername(String username) {
+        return toDoRepository.findByUsername(username)
+                .stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public void saveToDo(ToDo toDo) {
         toDoRepository.save(toDo);
     }
