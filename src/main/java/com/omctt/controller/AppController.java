@@ -105,8 +105,8 @@ public class AppController {
 
     @GetMapping("/page/{pageNo}")
     public String findPaginated(@PathVariable(value = "pageNo") int pageNo, Model model){
-        final int pageSize = 10;
-        Page<ToDoDto> page = toDoService.findPaginated(pageNo, pageSize);
+
+        Page<ToDoDto> page = toDoService.findPaginated(pageNo);
         List<ToDoDto> toDoDtoList = page.getContent();
         model.addAttribute("currentPage", pageNo);
         model.addAttribute("totalPages", page.getTotalPages());

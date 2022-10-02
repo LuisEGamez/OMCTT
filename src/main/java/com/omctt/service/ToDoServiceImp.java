@@ -67,8 +67,8 @@ public class ToDoServiceImp implements ToDoService{
     }
 
     @Override
-    public Page<ToDoDto> findPaginated(int pageNo, int pageSize) {
-        Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
+    public Page<ToDoDto> findPaginated(int pageNo) {
+        Pageable pageable = PageRequest.of(pageNo - 1, PAGE_SIDE);
         List<ToDoDto> all = toDoRepository.findAll().stream().map(this::convertToDto).toList();
         int start = (int) pageable.getOffset();
         int end = Math.min((start + pageable.getPageSize()), all.size());

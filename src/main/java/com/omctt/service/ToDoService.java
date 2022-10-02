@@ -20,5 +20,5 @@ public interface ToDoService {
 
     void delete(Integer idToDo);
 
-    Page<ToDoDto> findPaginated(int pageNo, int pageSize);
+    Page<ToDoDto> findPaginated(int pageNo);
 }
