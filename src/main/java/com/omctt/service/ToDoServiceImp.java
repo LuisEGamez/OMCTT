@@ -4,6 +4,10 @@ import com.omctt.dto.ToDoDto;
 import com.omctt.entity.ToDo;
 import com.omctt.repository.ToDoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -58,6 +62,16 @@ public class ToDoServiceImp implements ToDoService{
     @Override
     public void delete(Integer idToDo) {
         toDoRepository.deleteById(idToDo);
+    }
+
+    @Override
+    public Page<ToDoDto> findPaginated(int pageNo, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
+        List<ToDoDto> all = toDoRepository.findAll().stream().map(this::convertToDto).toList();
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), all.size());
+        return new PageImpl<>(all.subList(start,end), pageable, all.size());
+
     }
 
     private ToDoDto convertToDto(ToDo toDo) {

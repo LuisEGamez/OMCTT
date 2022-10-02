@@ -1,10 +1,12 @@
 package com.omctt.controller;
 
+import com.omctt.dto.ToDoDto;
 import com.omctt.entity.ToDo;
 import com.omctt.entity.User;
 import com.omctt.service.ToDoService;
 import com.omctt.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,6 +17,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Controller
 public class AppController {
@@ -28,9 +32,7 @@ public class AppController {
     @GetMapping("/")
     public String getToDos(Model model){
 
-        model.addAttribute("listToDos", toDoService.findAll());
-
-        return "index";
+        return findPaginated(1, model);
     }
 
     @GetMapping("/searchByTitle")
@@ -102,6 +104,23 @@ public class AppController {
         toDoService.delete(idToDo);
 
         return "redirect:/";
+    }
 
+    @GetMapping("/page/{pageNo}")
+    public String findPaginated(@PathVariable(value = "pageNo") int pageNo, Model model){
+        final int pageSize = 10;
+        Page<ToDoDto> page = toDoService.findPaginated(pageNo, pageSize);
+        List<ToDoDto> toDoDtoList = page.getContent();
+        if (page.getTotalPages() > 0) {
+            List<Integer> pageNumbers = IntStream.rangeClosed(1, page.getTotalPages())
+                    .boxed()
+                    .collect(Collectors.toList());
+            model.addAttribute("pageNumbers", pageNumbers);
+        }
+        model.addAttribute("currentPage", pageNo);
+        model.addAttribute("totalPages", page.getTotalPages());
+        model.addAttribute("totalItems", page.getTotalElements());
+        model.addAttribute("listToDos", toDoDtoList);
+        return "index";
     }
 }
