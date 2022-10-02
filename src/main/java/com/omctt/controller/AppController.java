@@ -10,15 +10,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import java.util.Optional;
 
 @Controller
 public class AppController {
@@ -52,6 +48,7 @@ public class AppController {
 
         if(username !=null && !username.equals("")){
             model.addAttribute("listToDos", toDoService.findByUsername(username));
+
         } else {
             model.addAttribute("listToDos", toDoService.findAll());
         }
@@ -111,16 +108,10 @@ public class AppController {
         final int pageSize = 10;
         Page<ToDoDto> page = toDoService.findPaginated(pageNo, pageSize);
         List<ToDoDto> toDoDtoList = page.getContent();
-        if (page.getTotalPages() > 0) {
-            List<Integer> pageNumbers = IntStream.rangeClosed(1, page.getTotalPages())
-                    .boxed()
-                    .collect(Collectors.toList());
-            model.addAttribute("pageNumbers", pageNumbers);
-        }
         model.addAttribute("currentPage", pageNo);
         model.addAttribute("totalPages", page.getTotalPages());
-        model.addAttribute("totalItems", page.getTotalElements());
         model.addAttribute("listToDos", toDoDtoList);
         return "index";
     }
+
 }

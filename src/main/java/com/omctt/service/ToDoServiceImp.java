@@ -17,6 +17,8 @@ import java.util.stream.Collectors;
 @Service
 public class ToDoServiceImp implements ToDoService{
 
+    private final int PAGE_SIDE = 10;
+
     @Autowired
     private ToDoRepository toDoRepository;
 
