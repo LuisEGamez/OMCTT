@@ -23,27 +23,30 @@ public class ToDoServiceImp implements ToDoService{
     private ToDoRepository toDoRepository;
 
     @Override
-    public List<ToDoDto> findAll() {
-        return toDoRepository.findAll()
+    public Page<ToDoDto> findAll(int pageNo) {
+        List<ToDoDto> toDoDtos = toDoRepository.findAll()
                 .stream()
                 .map(this::convertToDto)
-                .collect(Collectors.toList());
+                .toList();
+        return pager(pageNo, toDoDtos);
     }
 
     @Override
-    public List<ToDoDto> findByTitle(String title) {
-        return toDoRepository.findByTitleContainingIgnoreCase(title)
+    public Page<ToDoDto> findByTitle(String title, int pageNo) {
+        List<ToDoDto> toDoDtos = toDoRepository.findByTitleContainingIgnoreCase(title)
                 .stream()
                 .map(this::convertToDto)
-                .collect(Collectors.toList());
+                .toList();
+        return pager(pageNo, toDoDtos);
     }
 
     @Override
-    public List<ToDoDto> findByUsername(String username) {
-        return toDoRepository.findByUsername(username)
+    public Page<ToDoDto> findByUsername(String username, int pageNo) {
+        List<ToDoDto> toDoDtos = toDoRepository.findByUsername(username)
                 .stream()
                 .map(this::convertToDto)
-                .collect(Collectors.toList());
+                .toList();
+        return pager(pageNo, toDoDtos);
     }
 
     @Override
@@ -66,13 +69,13 @@ public class ToDoServiceImp implements ToDoService{
         toDoRepository.deleteById(idToDo);
     }
 
-    @Override
-    public Page<ToDoDto> findPaginated(int pageNo) {
+
+    private Page<ToDoDto> pager(int pageNo, List<ToDoDto> toDoDtos) {
         Pageable pageable = PageRequest.of(pageNo - 1, PAGE_SIDE);
-        List<ToDoDto> all = toDoRepository.findAll().stream().map(this::convertToDto).toList();
+        //List<ToDoDto> all = toDoRepository.findAll().stream().map(this::convertToDto).toList();
         int start = (int) pageable.getOffset();
-        int end = Math.min((start + pageable.getPageSize()), all.size());
-        return new PageImpl<>(all.subList(start,end), pageable, all.size());
+        int end = Math.min((start + pageable.getPageSize()), toDoDtos.size());
+        return new PageImpl<>(toDoDtos.subList(start,end), pageable, toDoDtos.size());
 
     }
 

@@ -26,34 +26,55 @@ public class AppController {
     private UserService userService;
 
     @GetMapping("/")
-    public String getToDos(Model model){
-
-        return findPaginated(1, model);
+    public String getToDos(@RequestParam(value = "page") Optional<Integer> page,
+                           Model model){
+        int currentPage = page.orElse(1);
+        Page<ToDoDto> toDoDtos = toDoService.findAll(currentPage);
+        List<ToDoDto> toDoDtoList = toDoDtos.getContent();
+        model.addAttribute("endPoint", "/");
+        model.addAttribute("currentPage", currentPage);
+        model.addAttribute("totalPages", toDoDtos.getTotalPages());
+        model.addAttribute("listToDos", toDoDtoList);
+        return "index";
     }
 
     @GetMapping("/searchByTitle")
-    public String getToDosByTitle(Model model,String title){
-
+    public String getToDosByTitle(@RequestParam(value = "page") Optional<Integer> page,
+                                  Model model,@RequestParam(value = "title") String title){
+        int currentPage = page.orElse(1);
         if(title !=null && !title.equals("")){
-            model.addAttribute("listToDos", toDoService.findByTitle(title));
+            Page<ToDoDto> toDoDtos = toDoService.findByTitle(title, currentPage);
+            List<ToDoDto> toDoDtoList = toDoDtos.getContent();
+            model.addAttribute("endPoint", "/searchByTitle");
+            model.addAttribute("title", title);
+            model.addAttribute("currentPage", currentPage);
+            model.addAttribute("totalPages", toDoDtos.getTotalPages());
+            model.addAttribute("listToDos", toDoDtoList);
         } else {
-            model.addAttribute("listToDos", toDoService.findAll());
+            model.addAttribute("listToDos", toDoService.findAll(currentPage));
         }
 
-        return "index";
+        return "byTitle";
     }
 
     @GetMapping("/searchByUsername")
-    public String getToDosByUsername(Model model,String username){
-
+    public String getToDosByUsername(@RequestParam(value = "page") Optional<Integer> page,
+                                     Model model,@RequestParam(value = "username") String username){
+        int currentPage = page.orElse(1);
         if(username !=null && !username.equals("")){
-            model.addAttribute("listToDos", toDoService.findByUsername(username));
+            Page<ToDoDto> toDoDtos = toDoService.findByUsername(username, currentPage);
+            List<ToDoDto> toDoDtoList = toDoDtos.getContent();
+            model.addAttribute("endPoint", "/searchByUsername");
+            model.addAttribute("username", username);
+            model.addAttribute("currentPage", currentPage);
+            model.addAttribute("totalPages", toDoDtos.getTotalPages());
+            model.addAttribute("listToDos", toDoDtoList);
 
         } else {
-            model.addAttribute("listToDos", toDoService.findAll());
+            model.addAttribute("listToDos", toDoService.findAll(currentPage));
         }
 
-        return "index";
+        return "filterByUsername";
     }
 
 
@@ -103,15 +124,15 @@ public class AppController {
         return "redirect:/";
     }
 
-    @GetMapping("/page/{pageNo}")
+    /*@GetMapping("/page/{pageNo}")
     public String findPaginated(@PathVariable(value = "pageNo") int pageNo, Model model){
 
-        Page<ToDoDto> page = toDoService.findPaginated(pageNo);
+        //Page<ToDoDto> page = toDoService.findPaginated(pageNo);
         List<ToDoDto> toDoDtoList = page.getContent();
         model.addAttribute("currentPage", pageNo);
         model.addAttribute("totalPages", page.getTotalPages());
         model.addAttribute("listToDos", toDoDtoList);
         return "index";
-    }
+    }*/
 
 }

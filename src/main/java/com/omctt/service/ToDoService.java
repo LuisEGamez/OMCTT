@@ -8,11 +8,11 @@ import java.util.List;
 
 public interface ToDoService {
 
-    List<ToDoDto> findAll();
+    Page<ToDoDto> findAll(int pageNo);
 
-    List<ToDoDto> findByTitle(String title);
+    Page<ToDoDto> findByTitle(String title, int pageNo);
 
-    List<ToDoDto> findByUsername(String username);
+    Page<ToDoDto> findByUsername(String username,int pageNo);
 
     void saveToDo(ToDo toDo);
 
@@ -20,5 +20,5 @@ public interface ToDoService {
 
     void delete(Integer idToDo);
 
-    Page<ToDoDto> findPaginated(int pageNo);
+    //Page<ToDoDto> findPaginated(int pageNo, List<ToDoDto>toDoDtos);
 }
