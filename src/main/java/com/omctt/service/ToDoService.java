@@ -10,6 +10,9 @@ public interface ToDoService {
 
     Page<ToDoDto> findAll(int pageNo);
 
+    List<ToDoDto> findAll1(int pageNo, String sortFilter, String sortDirection);
+
+
     Page<ToDoDto> findByTitle(String title, int pageNo);
 
     Page<ToDoDto> findByUsername(String username,int pageNo);
@@ -19,6 +22,8 @@ public interface ToDoService {
     ToDo findById(Integer idToDo);
 
     void delete(Integer idToDo);
+
+    int totalPages();
 
     //Page<ToDoDto> findPaginated(int pageNo, List<ToDoDto>toDoDtos);
 }

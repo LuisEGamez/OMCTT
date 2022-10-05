@@ -4,15 +4,11 @@ import com.omctt.dto.ToDoDto;
 import com.omctt.entity.ToDo;
 import com.omctt.repository.ToDoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class ToDoServiceImp implements ToDoService{
@@ -23,6 +19,11 @@ public class ToDoServiceImp implements ToDoService{
     private ToDoRepository toDoRepository;
 
     @Override
+    public int totalPages() {
+        return (int) Math.ceil(toDoRepository.count()/10.0) ;
+    }
+
+    @Override
     public Page<ToDoDto> findAll(int pageNo) {
         List<ToDoDto> toDoDtos = toDoRepository.findAll()
                 .stream()
@@ -30,6 +31,22 @@ public class ToDoServiceImp implements ToDoService{
                 .toList();
         return pager(pageNo, toDoDtos);
     }
+
+    @Override
+    public List<ToDoDto> findAll1(int pageNo, String sortField, String sortDirection) {
+
+        Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() :
+                Sort.by(sortField).descending();
+
+        Pageable pageable = PageRequest.of(pageNo - 1, PAGE_SIDE, sort);
+
+        return toDoRepository.findAll(pageable)
+                .stream()
+                .map(this::convertToDto)
+                .toList();
+
+    }
+
 
     @Override
     public Page<ToDoDto> findByTitle(String title, int pageNo) {
@@ -70,9 +87,13 @@ public class ToDoServiceImp implements ToDoService{
     }
 
 
+
+
     private Page<ToDoDto> pager(int pageNo, List<ToDoDto> toDoDtos) {
+        /*Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() :
+                Sort.by(sortField).descending();*/
+
         Pageable pageable = PageRequest.of(pageNo - 1, PAGE_SIDE);
-        //List<ToDoDto> all = toDoRepository.findAll().stream().map(this::convertToDto).toList();
         int start = (int) pageable.getOffset();
         int end = Math.min((start + pageable.getPageSize()), toDoDtos.size());
         return new PageImpl<>(toDoDtos.subList(start,end), pageable, toDoDtos.size());

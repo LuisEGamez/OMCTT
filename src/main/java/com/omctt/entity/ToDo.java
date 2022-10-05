@@ -29,7 +29,7 @@ public class ToDo {
 
     private Boolean completed;
 
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "user_id")
     private User user;
 
