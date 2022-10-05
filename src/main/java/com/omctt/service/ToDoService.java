@@ -8,9 +8,9 @@ import java.util.List;
 
 public interface ToDoService {
 
-    Page<ToDoDto> findAll(int pageNo);
+    List<ToDoDto> findAll(int pageNo);
 
-    List<ToDoDto> findAll1(int pageNo, String sortFilter, String sortDirection);
+    List<ToDoDto> findAll(int pageNo, String sortFilter, String sortDirection);
 
 
     Page<ToDoDto> findByTitle(String title, int pageNo);

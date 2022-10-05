@@ -24,20 +24,19 @@ public class ToDoServiceImp implements ToDoService{
     }
 
     @Override
-    public Page<ToDoDto> findAll(int pageNo) {
-        List<ToDoDto> toDoDtos = toDoRepository.findAll()
+    public List<ToDoDto> findAll(int pageNo) {
+        Pageable pageable = PageRequest.of(pageNo - 1, PAGE_SIDE);
+        List<ToDoDto> toDoDtos = toDoRepository.findAll(pageable)
                 .stream()
                 .map(this::convertToDto)
                 .toList();
-        return pager(pageNo, toDoDtos);
+        return toDoDtos;
     }
 
     @Override
-    public List<ToDoDto> findAll1(int pageNo, String sortField, String sortDirection) {
-
+    public List<ToDoDto> findAll(int pageNo, String sortField, String sortDirection) {
         Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() :
                 Sort.by(sortField).descending();
-
         Pageable pageable = PageRequest.of(pageNo - 1, PAGE_SIDE, sort);
 
         return toDoRepository.findAll(pageable)
