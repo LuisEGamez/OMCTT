@@ -30,13 +30,17 @@
                         </select>
                         <small></small>
                     </div>
-
-                    <div class="mb-3 form-check mt-3">
-                        <input type="checkbox" th:field="*{completed}" class="form-check-input" id="completed">
-                        <label class="form-check-label" for="completed">Completed</label>
+                    <div class="md-5 mt-3">
+                        <label class="form-check-label">Completed</label>
+                        <select class="form-select" th:field="*{completed}" aria-label="Default select example">
+                            <option value=false >Not completed</option>
+                            <option value=true >Completed</option>
+                        </select>
+                        <small></small>
                     </div>
-                    <div class="card-footer bg-dark">
+                    <div class=" mt-3 card-footer bg-dark">
                         <input type="submit" class="btn btn-primary" value="Save">
+                        <a th:href="@{/index}" class="btn btn-danger ">Cancel</a>
                     </div>
                 </form>
             </div>

@@ -2,7 +2,6 @@ package com.omctt.service;
 
 import com.omctt.dto.ToDoDto;
 import com.omctt.entity.ToDo;
-import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -10,12 +9,16 @@ public interface ToDoService {
 
     List<ToDoDto> findAll(int pageNo);
 
-    List<ToDoDto> findAll(int pageNo, String sortFilter, String sortDirection);
+    List<ToDoDto> findAll(int pageNo, String sortField, String sortDirection);
 
 
-    Page<ToDoDto> findByTitle(String title, int pageNo);
+    List<ToDoDto> findByTitle(String title, int pageNo);
 
-    Page<ToDoDto> findByUsername(String username,int pageNo);
+    List<ToDoDto> findByTitle(String title, int pageNo, String sortField, String sortDirection);
+
+    List<ToDoDto> findByUsername(String username,int pageNo);
+
+    List<ToDoDto> findByUsername(String username,int pageNo, String sortField, String sortDirection);
 
     void saveToDo(ToDo toDo);
 

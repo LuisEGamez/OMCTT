@@ -13,8 +13,8 @@ import java.util.List;
 public interface ToDoRepository extends JpaRepository<ToDo, Integer> {
 
 
-    List<ToDo> findByTitleContainingIgnoreCase(String title);
+    List<ToDo> findByTitleContainingIgnoreCase(String title, Pageable pageable);
 
-    @Query(value = "SELECT t.* FROM omc.todos t LEFT JOIN omc.users u ON t.user_id=u.id WHERE u.username=?1", nativeQuery = true)
-    List<ToDo> findByUsername(String username);
+    @Query(value = "SELECT * FROM omc.todos t LEFT JOIN omc.users u ON t.user_id=u.id WHERE u.username=?1", nativeQuery = true)
+    List<ToDo> findByUsername(String username, Pageable pageable);
 }

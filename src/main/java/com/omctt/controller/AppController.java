@@ -45,7 +45,7 @@ public class AppController {
                            @RequestParam("sortDir") Optional<String> sortDirection,
                            Model model){
         int currentPage = page.orElse(1);
-        String currentSortField = sortField.orElse("title");
+        String currentSortField = sortField.orElse("");
         String currentSortDirec = sortDirection.orElse("asc");
         List<ToDoDto> toDoDtoList = toDoService.findAll(currentPage,currentSortField, currentSortDirec);
         int totalPages = toDoService.totalPages();
@@ -63,20 +63,17 @@ public class AppController {
     @GetMapping("/searchByTitle")
     public String getToDosByTitle(@RequestParam(value = "page") Optional<Integer> page,
                                   @RequestParam(value = "title") String title,
-                                  @RequestParam("sortField") Optional<String> sortField,
-                                  @RequestParam("sortDir") Optional<String> sortDirection,
                                   Model model){
         int currentPage = page.orElse(1);
-        String currentSortField = sortField.orElse("title");
-        String currentSortDirec = sortDirection.orElse("asc");
         if(title !=null && !title.equals("")){
-            Page<ToDoDto> toDoDtos = toDoService.findByTitle(title, currentPage);
-            List<ToDoDto> toDoDtoList = toDoDtos.getContent();
+            List<ToDoDto> toDoDtos = toDoService.findByTitle(title, currentPage);
+            int totalPages = toDoService.totalPages();
             model.addAttribute("endPoint", "/searchByTitle");
             model.addAttribute("title", title);
             model.addAttribute("currentPage", currentPage);
-            model.addAttribute("totalPages", toDoDtos.getTotalPages());
-            model.addAttribute("listToDos", toDoDtoList);
+            model.addAttribute("totalPages", totalPages);
+            model.addAttribute("listToDos", toDoDtos);
+            model.addAttribute("reverseSortDir",  "asc");
         } else {
             model.addAttribute("listToDos", toDoService.findAll(currentPage));
         }
@@ -84,23 +81,24 @@ public class AppController {
         return "byTitle";
     }
 
-    @GetMapping("/searchByTitle/sort")
+    @GetMapping("/sort/searchByTitle")
     public String getToDosByTitleSort(@RequestParam(value = "page") Optional<Integer> page,
                                   @RequestParam(value = "title") String title,
                                   @RequestParam("sortField") Optional<String> sortField,
                                   @RequestParam("sortDir") Optional<String> sortDirection,
                                   Model model){
         int currentPage = page.orElse(1);
-        String currentSortField = sortField.orElse("title");
+        String currentSortField = sortField.orElse("");
         String currentSortDirec = sortDirection.orElse("asc");
         if(title !=null && !title.equals("")){
-            Page<ToDoDto> toDoDtos = toDoService.findByTitle(title, currentPage);
-            List<ToDoDto> toDoDtoList = toDoDtos.getContent();
-            model.addAttribute("endPoint", "/searchByTitle");
+            List<ToDoDto> toDoDtos = toDoService.findByTitle(title, currentPage, currentSortField, currentSortDirec);
+            int totalPages = toDoService.totalPages();
+            model.addAttribute("endPoint", "/sort/searchByTitle");
             model.addAttribute("title", title);
             model.addAttribute("currentPage", currentPage);
-            model.addAttribute("totalPages", toDoDtos.getTotalPages());
-            model.addAttribute("listToDos", toDoDtoList);
+            model.addAttribute("totalPages", totalPages);
+            model.addAttribute("listToDos", toDoDtos);
+            model.addAttribute("reverseSortDir", currentSortDirec.equals("asc") ? "desc" : "asc");
         } else {
             model.addAttribute("listToDos", toDoService.findAll(currentPage));
         }
@@ -111,20 +109,42 @@ public class AppController {
     @GetMapping("/searchByUsername")
     public String getToDosByUsername(@RequestParam(value = "page") Optional<Integer> page,
                                      @RequestParam(value = "username") String username,
+                                     Model model){
+        int currentPage = page.orElse(1);
+        if(username !=null && !username.equals("")){
+            List<ToDoDto> toDoDtos = toDoService.findByUsername(username, currentPage);
+            int totalPages = toDoService.totalPages();
+            model.addAttribute("endPoint", "/searchByUsername");
+            model.addAttribute("username", username);
+            model.addAttribute("currentPage", currentPage);
+            model.addAttribute("totalPages", totalPages);
+            model.addAttribute("listToDos", toDoDtos);
+            model.addAttribute("reverseSortDir",  "asc");
+        } else {
+            model.addAttribute("listToDos", toDoService.findAll(currentPage));
+        }
+
+        return "filterByUsername";
+    }
+
+    @GetMapping("/sort/searchByUsername")
+    public String getToDosByUsernameSort(@RequestParam(value = "page") Optional<Integer> page,
+                                     @RequestParam(value = "username") String username,
                                      @RequestParam("sortField") Optional<String> sortField,
                                      @RequestParam("sortDir") Optional<String> sortDirection,
                                      Model model){
         int currentPage = page.orElse(1);
-        String currentSortField = sortField.orElse("title");
+        String currentSortField = sortField.orElse("");
         String currentSortDirec = sortDirection.orElse("asc");
         if(username !=null && !username.equals("")){
-            Page<ToDoDto> toDoDtos = toDoService.findByUsername(username, currentPage);
-            List<ToDoDto> toDoDtoList = toDoDtos.getContent();
-            model.addAttribute("endPoint", "/searchByUsername");
+            List<ToDoDto> toDoDtos = toDoService.findByUsername(username, currentPage, currentSortField, currentSortDirec);
+            int totalPages = toDoService.totalPages();
+            model.addAttribute("endPoint", "/sort/searchByUsername");
             model.addAttribute("username", username);
             model.addAttribute("currentPage", currentPage);
-            model.addAttribute("totalPages", toDoDtos.getTotalPages());
-            model.addAttribute("listToDos", toDoDtoList);
+            model.addAttribute("totalPages", totalPages);
+            model.addAttribute("listToDos", toDoDtos);
+            model.addAttribute("reverseSortDir", currentSortDirec.equals("asc") ? "desc" : "asc");
 
         } else {
             model.addAttribute("listToDos", toDoService.findAll(currentPage));
@@ -156,7 +176,7 @@ public class AppController {
             return "formToDo";
         }
         toDoService.saveToDo(toDo);
-        return "redirect:/";
+        return "redirect:/index";
     }
 
     @GetMapping("/edit/{id}")
@@ -177,7 +197,7 @@ public class AppController {
 
         toDoService.delete(idToDo);
 
-        return "redirect:/";
+        return "redirect:/index";
     }
 
     /*@GetMapping("/page/{pageNo}")

@@ -2,7 +2,9 @@ package com.omctt.service;
 
 import com.omctt.dto.ToDoDto;
 import com.omctt.entity.ToDo;
+import com.omctt.entity.User;
 import com.omctt.repository.ToDoRepository;
+import com.omctt.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,9 @@ public class ToDoServiceImp implements ToDoService{
     @Autowired
     private ToDoRepository toDoRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @Override
     public int totalPages() {
         return (int) Math.ceil(toDoRepository.count()/10.0) ;
@@ -26,11 +31,10 @@ public class ToDoServiceImp implements ToDoService{
     @Override
     public List<ToDoDto> findAll(int pageNo) {
         Pageable pageable = PageRequest.of(pageNo - 1, PAGE_SIDE);
-        List<ToDoDto> toDoDtos = toDoRepository.findAll(pageable)
+        return toDoRepository.findAll(pageable)
                 .stream()
                 .map(this::convertToDto)
                 .toList();
-        return toDoDtos;
     }
 
     @Override
@@ -48,22 +52,48 @@ public class ToDoServiceImp implements ToDoService{
 
 
     @Override
-    public Page<ToDoDto> findByTitle(String title, int pageNo) {
-        List<ToDoDto> toDoDtos = toDoRepository.findByTitleContainingIgnoreCase(title)
+    public List<ToDoDto> findByTitle(String title, int pageNo) {
+        Pageable pageable = PageRequest.of(pageNo - 1, PAGE_SIDE);
+        return toDoRepository.findByTitleContainingIgnoreCase(title, pageable)
                 .stream()
                 .map(this::convertToDto)
                 .toList();
-        return pager(pageNo, toDoDtos);
+
     }
 
     @Override
-    public Page<ToDoDto> findByUsername(String username, int pageNo) {
-        List<ToDoDto> toDoDtos = toDoRepository.findByUsername(username)
+    public List<ToDoDto> findByTitle(String title, int pageNo, String sortField, String sortDirection) {
+
+        Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() :
+                Sort.by(sortField).descending();
+        Pageable pageable = PageRequest.of(pageNo - 1, PAGE_SIDE, sort);
+
+        return toDoRepository.findByTitleContainingIgnoreCase(title, pageable)
                 .stream()
                 .map(this::convertToDto)
                 .toList();
-        return pager(pageNo, toDoDtos);
     }
+
+    @Override
+    public List<ToDoDto> findByUsername(String username, int pageNo) {
+        Pageable pageable = PageRequest.of(pageNo - 1, PAGE_SIDE);
+        return toDoRepository.findByUsername(username, pageable)
+                .stream()
+                .map(this::convertToDto)
+                .toList();
+    }
+
+    @Override
+    public List<ToDoDto> findByUsername(String username, int pageNo, String sortField, String sortDirection) {
+        Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() :
+                Sort.by(sortField).descending();
+        Pageable pageable = PageRequest.of(pageNo - 1, PAGE_SIDE, sort);
+        return toDoRepository.findByUsername(username, pageable)
+                .stream()
+                .map(this::convertToDto)
+                .toList();
+    }
+
 
     @Override
     public void saveToDo(ToDo toDo) {
