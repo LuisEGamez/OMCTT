@@ -40,9 +40,9 @@ public class AppController {
     }
 
     @GetMapping("/sort")
-    public String getToDos(@RequestParam(value = "page") Optional<Integer> page,
-                           @RequestParam("sortField") Optional<String> sortField,
-                           @RequestParam("sortDir") Optional<String> sortDirection,
+    public String getToDos(@RequestParam(value = "page", required = false) Optional<Integer> page,
+                           @RequestParam( value = "sortField", required = false) Optional<String> sortField,
+                           @RequestParam(value = "sortDir", required = false) Optional<String> sortDirection,
                            Model model){
         int currentPage = page.orElse(1);
         String currentSortField = sortField.orElse("");
@@ -82,15 +82,15 @@ public class AppController {
     }
 
     @GetMapping("/sort/searchByTitle")
-    public String getToDosByTitleSort(@RequestParam(value = "page") Optional<Integer> page,
-                                  @RequestParam(value = "title") String title,
-                                  @RequestParam("sortField") Optional<String> sortField,
-                                  @RequestParam("sortDir") Optional<String> sortDirection,
+    public String getToDosByTitleSort(@RequestParam(value = "page", required = false) Optional<Integer> page,
+                                  @RequestParam(value = "title", required = false) String title,
+                                  @RequestParam(value = "sortField", required = false) Optional<String> sortField,
+                                  @RequestParam(value = "sortDir", required = false) Optional<String> sortDirection,
                                   Model model){
         int currentPage = page.orElse(1);
-        String currentSortField = sortField.orElse("");
+        String currentSortField = sortField.orElse("title");
         String currentSortDirec = sortDirection.orElse("asc");
-        if(title !=null && !title.equals("")){
+        if(title !=null && !title.equals("") ){
             List<ToDoDto> toDoDtos = toDoService.findByTitle(title, currentPage, currentSortField, currentSortDirec);
             int totalPages = toDoService.totalPages();
             model.addAttribute("endPoint", "/sort/searchByTitle");
@@ -129,9 +129,9 @@ public class AppController {
 
     @GetMapping("/sort/searchByUsername")
     public String getToDosByUsernameSort(@RequestParam(value = "page") Optional<Integer> page,
-                                     @RequestParam(value = "username") String username,
-                                     @RequestParam("sortField") Optional<String> sortField,
-                                     @RequestParam("sortDir") Optional<String> sortDirection,
+                                     @RequestParam(value = "username", required = false) String username,
+                                     @RequestParam(value = "sortField", required = false) Optional<String> sortField,
+                                     @RequestParam(value = "sortDir", required = false) Optional<String> sortDirection,
                                      Model model){
         int currentPage = page.orElse(1);
         String currentSortField = sortField.orElse("");
@@ -182,7 +182,18 @@ public class AppController {
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable("id") Integer idToDo, Model model){
 
-        ToDo toDo = toDoService.findById(idToDo);
+        ToDo toDo = null;
+        if(idToDo > 0){
+            toDo = toDoService.findById(idToDo);
+            if(toDo == null){
+                System.out.println("Error id doesn't exist");
+                return "redirect:/index";
+            }
+        }else {
+            System.out.println("Error bad id exist");
+            return "redirect:/index";
+        }
+
         List<User> userList = userService.getAll();
         model.addAttribute("title", "Edit ToDo");
         model.addAttribute("toDo", toDo);
