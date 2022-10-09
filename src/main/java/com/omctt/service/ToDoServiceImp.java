@@ -21,10 +21,6 @@ public class ToDoServiceImp implements ToDoService{
     @Autowired
     private UserRepository userRepository;
 
-    @Override
-    public int totalPages() {
-        return (int) Math.ceil(toDoRepository.count()/10.0) ;
-    }
 
     @Override
     public boolean existsByTitle(String title) {

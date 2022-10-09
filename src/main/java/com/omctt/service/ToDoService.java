@@ -30,7 +30,4 @@ public interface ToDoService {
 
     void delete(Integer idToDo);
 
-    int totalPages();
-
-    //Page<ToDoDto> findPaginated(int pageNo, List<ToDoDto>toDoDtos);
 }
