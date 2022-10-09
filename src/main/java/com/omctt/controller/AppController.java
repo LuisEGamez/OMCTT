@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.thymeleaf.util.StringUtils;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -36,6 +37,7 @@ public class AppController {
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("listToDos", toDoDtos);
         model.addAttribute("reverseSortDir",  "asc");
+
         return "index";
     }
 
@@ -173,14 +175,32 @@ public class AppController {
     }
 
     @PostMapping("/save")
-    public String save(@Valid @ModelAttribute ToDo toDo, BindingResult result, Model model){
+    public String save(@Valid @ModelAttribute ToDo toDo, Model model){
         List<User> userList = userService.getAll();
-        if(result.hasErrors()){
+        if(StringUtils.isEmptyOrWhitespace(toDo.getTitle())){
             model.addAttribute("title", "New ToDo");
             model.addAttribute("toDo", toDo);
             model.addAttribute("users", userList);
+            model.addAttribute("error", "Title cannot be empty");
             return "formToDo";
         }
+
+        if(toDo.getTitle().length()>200){
+            model.addAttribute("title", "New ToDo");
+            model.addAttribute("toDo", toDo);
+            model.addAttribute("users", userList);
+            model.addAttribute("error", "Max 200 characters");
+            return "formToDo";
+        }
+
+        if(toDoService.existsByTitle(toDo.getTitle())){
+            model.addAttribute("title", "New ToDo");
+            model.addAttribute("toDo", toDo);
+            model.addAttribute("users", userList);
+            model.addAttribute("error", "Title already in use");
+            return "formToDo";
+        }
+
         toDoService.saveToDo(toDo);
         return "redirect:/index";
     }
@@ -192,11 +212,11 @@ public class AppController {
         if(idToDo > 0){
             toDo = toDoService.findById(idToDo);
             if(toDo == null){
-                System.out.println("Error id doesn't exist");
+                System.out.println("Error, id doesn't exist");
                 return "redirect:/index";
             }
         }else {
-            System.out.println("Error bad id exist");
+            System.out.println("Error, bad id");
             return "redirect:/index";
         }
 
@@ -212,20 +232,11 @@ public class AppController {
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable("id") Integer idToDo){
 
-        toDoService.delete(idToDo);
-
+        if(toDoService.existsById(idToDo)){
+            toDoService.delete(idToDo);
+            return "redirect:/index";
+        }
         return "redirect:/index";
     }
-
-    /*@GetMapping("/page/{pageNo}")
-    public String findPaginated(@PathVariable(value = "pageNo") int pageNo, Model model){
-
-        //Page<ToDoDto> page = toDoService.findPaginated(pageNo);
-        List<ToDoDto> toDoDtoList = page.getContent();
-        model.addAttribute("currentPage", pageNo);
-        model.addAttribute("totalPages", page.getTotalPages());
-        model.addAttribute("listToDos", toDoDtoList);
-        return "index";
-    }*/
 
 }

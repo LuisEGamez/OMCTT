@@ -7,6 +7,10 @@ import java.util.List;
 
 public interface ToDoService {
 
+    boolean existsByTitle(String title);
+
+    boolean existsById(Integer id);
+
     List<ToDoDto> findAll(int pageNo);
 
     List<ToDoDto> findAll(int pageNo, String sortField, String sortDirection);

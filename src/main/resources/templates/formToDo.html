@@ -1,19 +1,20 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
+<head th:insert="fragments :: headerfiles">
+<!--    <meta charset="UTF-8">
     <title>ToDo Management System</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css"
         rel="stylesheet"
         integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT"
-        crossorigin="anonymous">
+        crossorigin="anonymous">-->
 </head>
 <body>
+<header th:insert="fragments :: nav"></header>
     <div class="container">
-        <div class="card bg-light">
+        <div class="card bg-light col-md-4 mx-auto">
             <div class="card-header bg-dark text-white" th:text="${title}">
             </div>
-            <div class="card-body">
+            <div class="card-body ">
                 <form th:action="@{/save}" th:object="${toDo}" method="post">
                     <div class="md-3 mt-3">
                         <input type="hidden" th:field="*{id}">
@@ -27,7 +28,6 @@
                     <div class="md-3 mt-3">
                         <label class="form-check-label">Choose user</label>
                         <select class="form-select" th:field="*{user}" aria-label="Default select example">
-                            <option value="" >None</option>
                             <option th:each="user : ${users}"
                                     th:value="${user.id}"
                                     th:text="${user.username}"></option>
@@ -46,10 +46,17 @@
                         <input type="submit" class="btn btn-primary" value="Save">
                         <a th:href="@{/index}" class="btn btn-danger ">Cancel</a>
                     </div>
+                    <div th:if="${error}" class="alert alert-danger alert-dismissible fade show mt-2" role="alert">
+                        <strong>Error!</strong> <p th:text="${error}"></p>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
                 </form>
             </div>
 
         </div>
     </div>
+
+<footer th:insert="fragments :: footer"></footer>
+<div th:insert="fragments :: scrips"></div>
 </body>
 </html>

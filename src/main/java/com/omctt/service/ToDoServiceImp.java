@@ -29,6 +29,16 @@ public class ToDoServiceImp implements ToDoService{
     }
 
     @Override
+    public boolean existsByTitle(String title) {
+        return toDoRepository.existsByTitle(title);
+    }
+
+    @Override
+    public boolean existsById(Integer id) {
+        return toDoRepository.existsById(id);
+    }
+
+    @Override
     public List<ToDoDto> findAll(int pageNo) {
         Pageable pageable = PageRequest.of(pageNo - 1, PAGE_SIDE);
         return toDoRepository.findAll(pageable)

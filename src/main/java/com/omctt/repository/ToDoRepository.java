@@ -12,6 +12,8 @@ import java.util.List;
 @Repository
 public interface ToDoRepository extends JpaRepository<ToDo, Integer> {
 
+    boolean existsByTitle(String title);
+
 
     List<ToDo> findByTitleContainingIgnoreCase(String title, Pageable pageable);
 
