@@ -18,9 +18,6 @@ public class ToDoServiceImp implements ToDoService{
     @Autowired
     private ToDoRepository toDoRepository;
 
-    @Autowired
-    private UserRepository userRepository;
-
 
     @Override
     public boolean existsByTitle(String title) {
