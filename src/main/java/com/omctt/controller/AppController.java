@@ -28,10 +28,10 @@ public class AppController {
                            Model model){
         int currentPage = page.orElse(1);
         List<ToDoDto> toDoDtos = toDoService.findAll(currentPage);
-        int totalPages = toDoService.totalPages();
+        int totalItems = toDoDtos.size();
         model.addAttribute("endPoint", "/index");
         model.addAttribute("currentPage", currentPage);
-        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("totalItems", totalItems);
         model.addAttribute("listToDos", toDoDtos);
         model.addAttribute("reverseSortDir",  "asc");
 
@@ -47,10 +47,10 @@ public class AppController {
         String currentSortField = sortField.orElse("");
         String currentSortDirec = sortDirection.orElse("asc");
         List<ToDoDto> toDoDtoList = toDoService.findAll(currentPage,currentSortField, currentSortDirec);
-        int totalPages = toDoService.totalPages();
+        int totalItems = toDoDtoList.size();
         model.addAttribute("endPoint", "/sort");
         model.addAttribute("currentPage", currentPage);
-        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("totalItems", totalItems);
         model.addAttribute("listToDos", toDoDtoList);
 
         model.addAttribute("sortField", currentSortField);
@@ -66,11 +66,11 @@ public class AppController {
         int currentPage = page.orElse(1);
         if(!StringUtils.isEmptyOrWhitespace(title)){
             List<ToDoDto> toDoDtos = toDoService.findByTitle(title, currentPage);
-            int totalPages = toDoService.totalPages();
+            int totalItems = toDoDtos.size();
             model.addAttribute("endPoint", "/searchByTitle");
             model.addAttribute("title", title);
             model.addAttribute("currentPage", currentPage);
-            model.addAttribute("totalPages", totalPages);
+            model.addAttribute("totalItems", totalItems);
             model.addAttribute("listToDos", toDoDtos);
             model.addAttribute("reverseSortDir",  "asc");
         } else {
@@ -91,18 +91,17 @@ public class AppController {
         String currentSortDirec = sortDirection.orElse("asc");
         if(!StringUtils.isEmptyOrWhitespace(title) ){
             List<ToDoDto> toDoDtos = toDoService.findByTitle(title, currentPage, currentSortField, currentSortDirec);
-            int totalPages = toDoService.totalPages();
+            int totalItems = toDoDtos.size();
             model.addAttribute("endPoint", "/sort/searchByTitle");
             model.addAttribute("title", title);
             model.addAttribute("currentPage", currentPage);
-            model.addAttribute("totalPages", totalPages);
+            model.addAttribute("totalItems", totalItems);
             model.addAttribute("listToDos", toDoDtos);
 
             model.addAttribute("sortField", currentSortField);
             model.addAttribute("sortDir", currentSortDirec);
             model.addAttribute("reverseSortDir", currentSortDirec.equals("asc") ? "desc" : "asc");
         } else {
-            //model.addAttribute("listToDos", toDoService.findAll(currentPage));
             return "redirect:/index";
         }
 
@@ -116,15 +115,14 @@ public class AppController {
         int currentPage = page.orElse(1);
         if(!StringUtils.isEmptyOrWhitespace(username)){
             List<ToDoDto> toDoDtos = toDoService.findByUsername(username, currentPage);
-            int totalPages = toDoService.totalPages();
+            int totalItems = toDoDtos.size();
             model.addAttribute("endPoint", "/searchByUsername");
             model.addAttribute("username", username);
             model.addAttribute("currentPage", currentPage);
-            model.addAttribute("totalPages", totalPages);
+            model.addAttribute("totalItems", totalItems);
             model.addAttribute("listToDos", toDoDtos);
             model.addAttribute("reverseSortDir",  "asc");
         } else {
-            //model.addAttribute("listToDos", toDoService.findAll(currentPage));
             return "redirect:/index";
         }
 
@@ -138,15 +136,15 @@ public class AppController {
                                      @RequestParam(value = "sortDir") Optional<String> sortDirection,
                                      Model model){
         int currentPage = page.orElse(1);
-        String currentSortField = sortField.orElse("");
+        String currentSortField = sortField.orElse("title");
         String currentSortDirec = sortDirection.orElse("asc");
         if(!StringUtils.isEmptyOrWhitespace(username)){
             List<ToDoDto> toDoDtos = toDoService.findByUsername(username, currentPage, currentSortField, currentSortDirec);
-            int totalPages = toDoService.totalPages();
+            int totalItems = toDoDtos.size();
             model.addAttribute("endPoint", "/sort/searchByUsername");
             model.addAttribute("username", username);
             model.addAttribute("currentPage", currentPage);
-            model.addAttribute("totalPages", totalPages);
+            model.addAttribute("totalItems", totalItems);
             model.addAttribute("listToDos", toDoDtos);
 
             model.addAttribute("sortField", currentSortField);
@@ -154,7 +152,6 @@ public class AppController {
             model.addAttribute("reverseSortDir", currentSortDirec.equals("asc") ? "desc" : "asc");
 
         } else {
-            //model.addAttribute("listToDos", toDoService.findAll(currentPage));
             return "redirect:/index";
         }
 
