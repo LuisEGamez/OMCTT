@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+                xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>ToDo's</title>
@@ -13,6 +14,10 @@
         <h1>ToDo's</h1>
         <a th:href="@{/create}" class="btn btn-primary btn-sm mb-3">Create ToDo</a>
         <a th:href="@{/index}" class="btn btn-primary btn-sm mb-3">Index</a>
+        <a th:href="@{/login}" sec:authorize="!isAuthenticated()" class="btn btn-primary btn-sm mb-3">Login</a>
+        <form th:action="@{/logout}" sec:authorize="isAuthenticated()"  method="post">
+            <button class="btn btn-outline-danger my-2 my-sm-0" type="submit">Logout</button>
+        </form>
         <div class="row">
             <div class="col-2">
                 <form class="mb-3" th:action="@{/searchByTitle}" method="get">
@@ -49,8 +54,8 @@
                             Completed
                         </a>
                     </th>
-                    <th>Update</th>
-                    <th>Delete</th>
+                    <th sec:authorize="isAuthenticated()" >Update</th>
+                    <th sec:authorize="isAuthenticated()">Delete</th>
                 </tr>
             </thead>
             <tbody>
@@ -59,11 +64,12 @@
                     <td th:text="${toDoDto.userName}"></td>
                     <td th:text="${toDoDto.country}"></td>
                     <td th:text="${toDoDto.completed}"></td>
-                    <td>
-                        <a th:href="@{/edit/} + ${toDoDto.id}" class="btn btn-success btn-sm mb-3" title="Update ToDo">Update</a>
+
+                    <td sec:authorize="isAuthenticated()" >
+                        <a  th:href="@{/edit/} + ${toDoDto.id}" th:if="${toDoDto.userName==#authentication.getPrincipal().getUsername()}" class="btn btn-success btn-sm mb-3" title="Update ToDo">Update</a>
                     </td>
-                    <td>
-                        <a th:href="@{/delete/} + ${toDoDto.id}" class="btn btn-danger btn-sm mb-3"
+                    <td sec:authorize="isAuthenticated()" >
+                        <a th:href="@{/delete/} + ${toDoDto.id}" th:if="${toDoDto.userName==#authentication.getPrincipal().getUsername()}" class="btn btn-danger btn-sm mb-3"
                            title="Delete ToDo" onclick="return confirm('Are you sure?');">Delete</a>
                     </td>
                 </tr>

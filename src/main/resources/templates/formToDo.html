@@ -17,6 +17,10 @@
                 <form th:action="@{/save}" th:object="${toDo}" method="post">
                     <div class="md-3 mt-3">
                         <input type="hidden" th:field="*{id}">
+
+                         <!--Control ataque csrf
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                         End ataque csrf-->
                         <input type="text" th:field="*{title}" class="form-control" id="title" placeholder="Title">
                         <small class="from-text text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"> </small>
                     </div>

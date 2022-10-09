@@ -10,11 +10,11 @@ INSERT INTO omc.address (city, country, street, zipcode) values ("Almeria", "Spa
 INSERT INTO omc.address (city, country, street, zipcode) values ("Barcelona", "Spain", "Llull", "08005");
 INSERT INTO omc.address (city, country, street, zipcode) values ("Madrid", "Spain", "Francisco I", "32123");
 INSERT INTO omc.address (city, country, street, zipcode) values ("Vigo", "Spain", "Pulpo", "56789");
-INSERT INTO omc.users (name, username, password, address_id) values ("Luis", "luis23", "12345", 1);
-INSERT INTO omc.users (name, username, password, address_id) values ("Maria", "maria12", "12345", 2);
-INSERT INTO omc.users (name, username, password, address_id) values ("Lucas", "lucas22", "12345", 3);
-INSERT INTO omc.users (name, username, password, address_id) values ("Ana", "ana23", "12345", 4);
-INSERT INTO omc.users (name, username, password, address_id) values ("Juan", "juan55", "12345", 5);
+INSERT INTO omc.users (name, username, password, address_id) values ("Luis", "luis23", "$2a$10$7Xh7F0wGyEQYgqz/CJNNu.V1JSfPqzx8SaZy.jNtjmnjVL7HFFJ5i", 1);
+INSERT INTO omc.users (name, username, password, address_id) values ("Maria", "maria12", "$2a$10$7Xh7F0wGyEQYgqz/CJNNu.V1JSfPqzx8SaZy.jNtjmnjVL7HFFJ5i", 2);
+INSERT INTO omc.users (name, username, password, address_id) values ("Lucas", "lucas22", "$2a$10$7Xh7F0wGyEQYgqz/CJNNu.V1JSfPqzx8SaZy.jNtjmnjVL7HFFJ5i", 3);
+INSERT INTO omc.users (name, username, password, address_id) values ("Ana", "ana23", "$2a$10$7Xh7F0wGyEQYgqz/CJNNu.V1JSfPqzx8SaZy.jNtjmnjVL7HFFJ5i", 4);
+INSERT INTO omc.users (name, username, password, address_id) values ("Juan", "juan55", "$2a$10$7Xh7F0wGyEQYgqz/CJNNu.V1JSfPqzx8SaZy.jNtjmnjVL7HFFJ5i", 5);
 INSERT INTO omc.todos (title, completed, user_id) values ("Comprar comida", FALSE, 1);
 INSERT INTO omc.todos (title, completed, user_id) values ("Lavar platos", TRUE, 1);
 INSERT INTO omc.todos (title, completed, user_id) values ("Cortar setos", FALSE, 3);

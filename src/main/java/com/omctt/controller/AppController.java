@@ -83,9 +83,9 @@ public class AppController {
 
     @GetMapping("/sort/searchByTitle")
     public String getToDosByTitleSort(@RequestParam(value = "page", required = false) Optional<Integer> page,
-                                  @RequestParam(value = "title", required = false) String title,
-                                  @RequestParam(value = "sortField", required = false) Optional<String> sortField,
-                                  @RequestParam(value = "sortDir", required = false) Optional<String> sortDirection,
+                                  @RequestParam(value = "title") String title,
+                                  @RequestParam(value = "sortField") Optional<String> sortField,
+                                  @RequestParam(value = "sortDir") Optional<String> sortDirection,
                                   Model model){
         int currentPage = page.orElse(1);
         String currentSortField = sortField.orElse("title");
@@ -98,6 +98,9 @@ public class AppController {
             model.addAttribute("currentPage", currentPage);
             model.addAttribute("totalPages", totalPages);
             model.addAttribute("listToDos", toDoDtos);
+
+            model.addAttribute("sortField", currentSortField);
+            model.addAttribute("sortDir", currentSortDirec);
             model.addAttribute("reverseSortDir", currentSortDirec.equals("asc") ? "desc" : "asc");
         } else {
             model.addAttribute("listToDos", toDoService.findAll(currentPage));
@@ -144,6 +147,9 @@ public class AppController {
             model.addAttribute("currentPage", currentPage);
             model.addAttribute("totalPages", totalPages);
             model.addAttribute("listToDos", toDoDtos);
+
+            model.addAttribute("sortField", currentSortField);
+            model.addAttribute("sortDir", currentSortDirec);
             model.addAttribute("reverseSortDir", currentSortDirec.equals("asc") ? "desc" : "asc");
 
         } else {
