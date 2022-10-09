@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+                xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:insert="fragments :: headerfiles">
 <!--  <meta charset="UTF-8">
   <title>ToDo's</title>
@@ -21,7 +22,10 @@
         </ul>-->
       </div>
       <div class="card-body">
-        <form th:action="@{/signin}"  method="post">
+        <form th:action="@{/signin}" sec:authorize="!isAuthenticated()"  method="post">
+          <!--Control ataque csrf-->
+          <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+          <!--End ataque csrf-->
           <div class="md-3 mt-3">
             <input type="text" class="form-control" id="username" name="username" placeholder="Username" required>
           </div>
@@ -34,6 +38,10 @@
           </div>
           <div class=" mt-3 card-footer bg-dark">
             <input type="submit" class="btn btn-primary" value="Login">
+          </div>
+          <div th:if="${param.error}" class="alert alert-danger alert-dismissible fade show mt-2" role="alert">
+            <strong>Error!</strong> <p>Bad credentials</p>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
           </div>
         </form>
       </div>
