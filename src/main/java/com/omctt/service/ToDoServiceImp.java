@@ -2,11 +2,13 @@ package com.omctt.service;
 
 import com.omctt.dto.ToDoDto;
 import com.omctt.entity.ToDo;
+import com.omctt.entity.User;
 import com.omctt.repository.ToDoRepository;
 import com.omctt.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -121,6 +123,20 @@ public class ToDoServiceImp implements ToDoService{
     @Override
     public void delete(Integer idToDo) {
         toDoRepository.deleteById(idToDo);
+    }
+
+
+
+
+    private Page<ToDoDto> pager(int pageNo, List<ToDoDto> toDoDtos) {
+        /*Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() :
+                Sort.by(sortField).descending();*/
+
+        Pageable pageable = PageRequest.of(pageNo - 1, PAGE_SIDE);
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), toDoDtos.size());
+        return new PageImpl<>(toDoDtos.subList(start,end), pageable, toDoDtos.size());
+
     }
 
     private ToDoDto convertToDto(ToDo toDo) {
