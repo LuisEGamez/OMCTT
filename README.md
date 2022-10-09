@@ -45,10 +45,10 @@ data.sql load data into data base
 http://localhost:9001/index
 ```
 
-6. **URL** To open application:
+6. **Login** To login :
 
 ```
-All users password are 123456
+The password for all users is 123456.
 ```
 
 
