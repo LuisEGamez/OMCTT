@@ -22,30 +22,34 @@ host: localhost
 username: root
 password: root
 ```
+2. **Create DB** :
+```
+Create omc data base on MySQL
+```
 
-2. **Initial data** :
+3. **Initial data** :
 ```
 data.sql load data into data base
 ```
 
-3. **Package** To package application:
+4. **Package** To package application:
 ```
 ./mvnw clean package
 ```
 
-4. **Run** To run application:
+5. **Run** To run application:
 
 ```
 ./mvnw spring-boot:run
 ```
 
-5. **URL** To open application:
+6. **URL** To open application:
 
 ```
 http://localhost:9001/index
 ```
 
-6. **Login** To login :
+7. **Login** To login :
 
 ```
 The password for all users is 123456.
